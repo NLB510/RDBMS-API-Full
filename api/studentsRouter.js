@@ -67,4 +67,39 @@ router.post("/", (req, res) => {
     });
 });
 
+
+// PUT
+
+router.put("/:id", (req, res) => {
+  const changes = req.body;
+  const { id } = req.params;
+
+  if (!changes.name) {
+    return res.status(400).json({
+
+      errorMessage: "Please add a student name and cohort id."
+    });
+  }
+
+  db.update(id, changes)
+    .then(changes => {
+      console.log(changes);
+      if (!changes) {
+        return res.status(404).json({
+          errorMessage: "The specified student does not exist."
+        });
+      } else {
+        res.status(200).json({
+          message: "Update successful"
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).json({
+        error: "There was an error with the database"
+      });
+    });
+});
+
+
 module.exports = router;
