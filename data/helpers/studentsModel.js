@@ -5,20 +5,29 @@ module.exports = {
   getById,
   insert,
   update,
-  remove
+  remove,
+  
 };
 
-
-
 function get() {
-  return db('students');
+  return db("students");
 }
 
-
 function getById(id) {
-  return db("students")
-    .where({ id })
+  return db
+    .select('students.name as studentName', 'cohorts.name as cohortName').from('students')
+    .innerJoin('cohorts', "cohorts.id", "students.cohort_id")
+    .where('students.id', id )
     .first();
+
+// return db
+//   .select("students.name as Name")
+//   .from("cohorts")
+//   .innerJoin("students", "cohorts.id", "students.cohort_id")
+//   .where("cohorts.id", id);
+
+
+
 }
 
 function insert(post) {
@@ -30,11 +39,12 @@ function insert(post) {
 }
 
 
+
 function update(id, changes) {
   return db("students")
     .where("id", id)
     .update(changes);
-} 
+}
 
 function remove(id) {
   return db("students")

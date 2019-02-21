@@ -21,7 +21,7 @@ function getById(id) {
 
 function getStudentsInCohort(id) {
   return db
-    .select("cohorts.name as Cohort", "students.name as Name")
+    .select("students.name as Name")
     .from("cohorts")
     .innerJoin("students", "cohorts.id", "students.cohort_id")
     .where("cohorts.id", id);
