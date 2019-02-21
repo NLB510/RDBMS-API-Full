@@ -85,6 +85,43 @@ router.post("/", (req, res) => {
     });
 });
 
+// PUT
+
+router.put("/:id", (req, res) => {
+  const changes = req.body
+  const {id} = req.params;
+
+  if (!changes.name) {
+    return res.status(400).json({
+      errorMessage: 'Please add a cohort name.'
+    })
+  }
+
+  db.update(id, changes)
+  .then(changes => {
+    console.log(changes)
+    if (!changes) {
+      return res.status(404).json({
+        errorMessage: 'The specified cohort does not exist.'
+      })
+    } else {
+      res.status(200).json({
+        message: 'Update successful',
+      })
+    }
+  })
+  .catch(err => {
+    res.status(500).json({
+      error: "There was an error with the database"
+    })
+  })
+
+
+
+})
+
+
+
 // DELETE
 
 router.delete("/:id", (req, res) => {
