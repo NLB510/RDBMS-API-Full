@@ -18,6 +18,37 @@ router.get('/', (req, res) => {
   })
 })
 
+router.get("/:id", (req, res) => {
+  const id = req.params.id
+  
+  db.getById(id)
+    .then(cohort => {
+      res.status(200).json(cohort);
+    })
+    .catch(error => {
+      res.status(500).json({
+        error: "There was an error retrieving cohorts data."
+      });
+    });
+});
+
+
+
+router.get("/:id/students", (req, res) => {
+  const id = req.params.id
+
+  db.getStudentsInCohort(id)
+    .then(students => {
+      res.status(200).json(students);
+    })
+    .catch(error => {
+      res.status(500).json({
+        errorMessage: "There was an error retrieving cohorts data.", 
+        error: error
+      });
+    });
+});
+
 
 
 
