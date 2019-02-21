@@ -4,8 +4,9 @@ module.exports = {
   get,
   getById,
   insert,
-  update
-}
+  update,
+  remove
+};
 
 
 
@@ -34,3 +35,9 @@ function update(id, changes) {
     .where("id", id)
     .update(changes);
 } 
+
+function remove(id) {
+  return db("students")
+    .where("id", id)
+    .del();
+}
