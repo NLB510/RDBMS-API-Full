@@ -23,7 +23,13 @@ router.get("/:id", (req, res) => {
 
   db.getById(id)
     .then(cohort => {
-      res.status(200).json(cohort);
+      if (!cohort) {
+        res.status(404).json({
+          errorMessage: "The cohort does not exist"
+        });
+      } else {
+        res.status(200).json(cohort);
+      }
     })
     .catch(error => {
       res.status(500).json({
@@ -37,7 +43,13 @@ router.get("/:id/students", (req, res) => {
 
   db.getStudentsInCohort(id)
     .then(students => {
-      res.status(200).json(students);
+      if (students.length === 0) {
+        return res.status(404).json({
+          errorMessage: "The cohort does not exist"
+        });
+      } else {
+        res.status(200).json(students);
+      }
     })
     .catch(error => {
       res.status(500).json({
@@ -69,6 +81,31 @@ router.post("/", (req, res) => {
     .catch(err => {
       res.status(500).json({
         error: "There was an error posting to the database."
+      });
+    });
+});
+
+// DELETE
+
+router.delete("/:id", (req, res) => {
+  const { id } = req.params;
+
+  db.remove(id)
+    .then(count => {
+      console.log(count);
+      if (count === 0) {
+        return res.status(404).json({
+          message: "The cohort you specified does not exist."
+        });
+      } else {
+        res.status(200).json({
+          message: "Cohort removed successfully"
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).json({
+        error: "There was an error deleting the cohort"
       });
     });
 });

@@ -4,7 +4,8 @@ module.exports = {
   get,
   getById,
   getStudentsInCohort,
-  insert
+  insert,
+  remove
 };
 
 function get() {
@@ -31,4 +32,11 @@ function insert(post) {
     .then(ids => {
       return getById(ids[0]);
     });
+}
+
+
+function remove(id) {
+  return db('cohorts')
+  .where('id', id)
+  .del()
 }
